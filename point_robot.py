@@ -206,116 +206,121 @@ def dijkstra(initial_state,final_state,canvas):
 
         flag,next_node = action_move_up(node[2],canvas)
         if(flag):
-            print("Move up")
+            # print("Move up")
             if next_node not in closed_list:
                 temp = False
                 for i in range(len(open_list)):
                     if(open_list[i][2] == list(next_node)):
-                        print("Found in Open list: ", open_list[i][2],next_node)
+                        # print("Found in Open list: ", open_list[i][2],next_node)
                         temp = True
                         if((present_cost+1)<open_list[i][0]):
-                            print("Before Updation: ",len(open_list))
                             open_list[i][0] = present_cost+1
                             open_list[i][1] = node[2]
-                            print("After Updation: ", len(open_list))
+                            hq.heapify(open_list)
+                        break
                 if(not temp):
                     hq.heappush(open_list,[present_cost+1, node[2], list(next_node)])
                     hq.heapify(open_list)
-                    print("Pushed",temp)
+                    # print("Pushed",temp)
         
         flag,next_node = action_move_top_right(node[2],canvas)
         if(flag):
-            print("Move top right")
+            # print("Move top right")
             if next_node not in closed_list:
                 temp = False
                 for i in range(len(open_list)):
                     if(open_list[i][2] == list(next_node)):
-                        print("Found in Open list: ", open_list[i][2],next_node)
+                        # print("Found in Open list: ", open_list[i][2],next_node)
                         temp = True
                         if((present_cost+1.4)<open_list[i][0]):
                             open_list[i][0] = present_cost+1.4
                             open_list[i][1] = node[2]
+                            hq.heapify(open_list)
                         break
                 if(not temp):
                     hq.heappush(open_list,[present_cost+1.4, node[2], list(next_node)])
                     hq.heapify(open_list)
-                    print("Pushed",temp)
+                    # print("Pushed",temp)
                 
         flag,next_node = action_move_right(node[2],canvas)
         if(flag):
-            print("Move right")
+            # print("Move right")
             if next_node not in closed_list:
                 temp = False
                 for i in range(len(open_list)):
                     if(open_list[i][2] == list(next_node)):
-                        print("Found in Open list: ", open_list[i][2],next_node)
+                        # print("Found in Open list: ", open_list[i][2],next_node)
                         temp = True
                         if((present_cost+1)<open_list[i][0]):
                             open_list[i][0] = present_cost+1
                             open_list[i][1] = node[2]
+                            hq.heapify(open_list)
                         break
                 if(not temp):
                     hq.heappush(open_list,[present_cost+1, node[2], list(next_node)])
                     hq.heapify(open_list)
-                    print("Pushed",temp)
+                    # print("Pushed",temp)
     
         flag,next_node = action_move_bottom_right(node[2],canvas)
         if(flag):
-            print("Move bottom right")
+            # print("Move bottom right")
             if next_node not in closed_list:
                 temp = False
                 for i in range(len(open_list)):
                     if(open_list[i][2] == list(next_node)):
-                        print("Found in Open list: ", open_list[i][2],next_node)
+                        # print("Found in Open list: ", open_list[i][2],next_node)
                         temp = True
                         if((present_cost+1.4)<open_list[i][0]):
                             open_list[i][0] = present_cost+1.4
                             open_list[i][1] = node[2]
+                            hq.heapify(open_list)
                         break
                 if(not temp):
                     hq.heappush(open_list,[present_cost+1.4, node[2], list(next_node)])
                     hq.heapify(open_list)
-                    print("Pushed",temp)
+                    # print("Pushed",temp)
         
         flag,next_node = action_move_down(node[2],canvas)
         if(flag):
-            print("Move down")
+            # print("Move down")
             if next_node not in closed_list:
                 temp = False
                 for i in range(len(open_list)):
                     if(open_list[i][2] == list(next_node)):
-                        print("Found in Open list: ", open_list[i][2],next_node)
+                        # print("Found in Open list: ", open_list[i][2],next_node)
                         temp = True
                         if((present_cost+1)<open_list[i][0]):
                             open_list[i][0] = present_cost+1
                             open_list[i][1] = node[2]
+                            hq.heapify(open_list)
                         break
                 if(not temp):
                     hq.heappush(open_list,[present_cost+1, node[2], list(next_node)])
                     hq.heapify(open_list)
-                    print("Pushed",temp)
+                    # print("Pushed",temp)
         
         flag,next_node = action_move_bottom_left(node[2],canvas)
         if(flag):
-            print("Move bottom left")
+            # print("Move bottom left")
             if next_node not in closed_list:
                 temp = False
                 for i in range(len(open_list)):
                     if(open_list[i][2] == list(next_node)):
-                        print("Found in Open list: ", open_list[i][2],next_node)
+                        # print("Found in Open list: ", open_list[i][2],next_node)
                         temp = True
                         if((present_cost+1.4)<open_list[i][0]):
                             open_list[i][0] = present_cost+1.4
                             open_list[i][1] = node[2]
+                            hq.heapify(open_list)
                         break
                 if(not temp):
                     hq.heappush(open_list,[present_cost+1.4, node[2], list(next_node)])
                     hq.heapify(open_list)
-                    print("Pushed",temp)
+                    # print("Pushed",temp)
         
         flag,next_node = action_move_left(node[2],canvas)
         if(flag):
-            print("Move left")
+            # print("Move left")
             if next_node not in closed_list:
                 temp = False
                 for i in range(len(open_list)):
@@ -325,31 +330,33 @@ def dijkstra(initial_state,final_state,canvas):
                         if((present_cost+1)<open_list[i][0]):
                             open_list[i][0] = present_cost+1
                             open_list[i][1] = node[2]
+                            hq.heapify(open_list)
                         break
                 if(not temp):
                     hq.heappush(open_list,[present_cost+1, node[2], list(next_node)])
                     hq.heapify(open_list)
-                    print("Pushed",temp)
+                    # print("Pushed",temp)
         
         flag,next_node = action_move_top_left(node[2],canvas)
         if(flag):
-            print("Move top left")
+            # print("Move top left")
             if next_node not in closed_list:
                 temp = False
                 for i in range(len(open_list)):
                     if(open_list[i][2] == list(next_node)):
-                        print("Found in Open list: ", open_list[i][2],next_node)
+                        # print("Found in Open list: ", open_list[i][2],next_node)
                         temp = True
                         if((present_cost+1.4)<open_list[i][0]):
                             open_list[i][0] = present_cost+1.4
                             open_list[i][1] = node[2]
+                            hq.heapify(open_list)
                         break
                 if(not temp):
                     hq.heappush(open_list,[present_cost+1.4, node[2], list(next_node)])
                     hq.heapify(open_list)
-                    print("Pushed",temp)
+                    # print("Pushed",temp)
         
-        # hq.heapify(open_list)
+        hq.heapify(open_list)
         print("Open List length",len(open_list))
         print("Closed List Length", len(closed_list))
         # print("Closed List: ",closed_list)
@@ -359,12 +366,12 @@ def dijkstra(initial_state,final_state,canvas):
     else:
         print("Solution Cannot Be Found")
         
-        
             
 def back_track(final_state,closed_list,canvas):
     keys = closed_list.keys()
     for key in keys:
         canvas[key[1]][key[0]] = [255,255,255]
+        cv2.imshow("Back Tracking",canvas)
 
 if __name__ == '__main__':
     canvas = np.ones((250,400,3),dtype="uint8")
@@ -378,6 +385,6 @@ if __name__ == '__main__':
     cv2.circle(canvas,tuple(initial_state),3,(0,255,0),-1)
     cv2.circle(canvas,tuple(final_state),3,(0,0,255),-1)
     dijkstra(initial_state,final_state,canvas)
-    cv2.imshow("Canvas",canvas)
+    # cv2.imshow("Canvas",canvas)
     cv2.waitKey(0)
     cv2.destroyAllWindows()
