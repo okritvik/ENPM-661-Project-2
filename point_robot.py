@@ -373,6 +373,7 @@ def back_track(final_state,closed_list,canvas):
     for key in keys:
         canvas[key[1]][key[0]] = [255,255,255]
         cv2.imshow("Back Tracking",canvas)
+        cv2.waitKey(1)
 
 if __name__ == '__main__':
     start_time = time.time()
@@ -382,14 +383,17 @@ if __name__ == '__main__':
     # cv2.waitKey(0)
     # cv2.destroyAllWindows()
     initial_state,final_state = take_inputs()
+    #Changing the cartesian coordinates:
+    # initial_state[1] = canvas.shape[0] - initial_state[1]
+    # final_state[1] = canvas.shape[0] - final_state[1]
+
     #Check if the initial and final states are in the obstacle space
     # print(initial_state,final_state)
     cv2.circle(canvas,tuple(initial_state),3,(0,255,0),-1)
     cv2.circle(canvas,tuple(final_state),3,(0,0,255),-1)
+    cv2.imshow("Canvas",canvas)
     dijkstra(initial_state,final_state,canvas)
-    # cv2.imshow("Canvas",canvas)
     end_time = time.time()
     cv2.waitKey(0)
     cv2.destroyAllWindows()
     print("Code Execution Time: ",end_time-start_time)
-    
