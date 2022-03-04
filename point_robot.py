@@ -10,6 +10,7 @@ A geometrical obstacle map is given. For the given obstacle map, mathematical eq
 import copy
 import numpy as np
 import cv2
+import heapq as hq
 
 def take_inputs():
     """
@@ -70,14 +71,243 @@ def draw_obstacles(canvas):
                 canvas[j][i] = [255,0,0]
     return canvas
 
+def action_move_up(node,canvas):
+    """
+    @brief: This function checks if the upward movement is possible for the current position
+    :param node: present node state
+    :return: boolean (true if upward movement is possible, false otherwise) and the generated node(same state if next state is not possible)
+    """
+    next_node = copy.deepcopy(node)
+    # if(canvas.shape[0] - (current_node[1]+1)>0) and (canvas[canvas.shape[0]-current_node[1]+1][current_node[0]][0]<255):
+    #     current_node = [current_node[0], canvas.shape[0] - (current_node[1] + 1)]
+    if(next_node[1]-1 > 0) and (canvas[next_node[1]-1][next_node[0]][0]<255):
+        next_node[1] = next_node[1] - 1 
+        return True,next_node
+    else:
+        return False,next_node
+
+def action_move_down(node,canvas):
+#     """
+#     @brief: This function checks if the downward movement is possible for the current position
+#     :param node: present node state
+#     :return: boolean (true if downward movement is possible, false otherwise) and the generated node(same state if next state is not possible)
+#     """
+    next_node = copy.deepcopy(node)
+    # if(canvas.shape[0] - (current_node[1]+1)>0) and (canvas[canvas.shape[0]-current_node[1]+1][current_node[0]][0]<255):
+    #     current_node = [current_node[0], canvas.shape[0] - (current_node[1] + 1)]
+    if(next_node[1]+1 < canvas.shape[0]) and (canvas[next_node[1]+1][next_node[0]][0]<255):
+        next_node[1] = next_node[1] + 1 
+        return True,next_node
+    else:
+        return False,next_node
+
+def action_move_left(node,canvas):
+#     """
+#     @brief: This function checks if the left movement is possible for the current position
+#     :param node: present node state
+#     :return: boolean (true if left movement is possible, false otherwise) and the generated node(same state if next state is not possible)
+#     """
+    next_node = copy.deepcopy(node)
+    # if(canvas.shape[0] - (current_node[1]+1)>0) and (canvas[canvas.shape[0]-current_node[1]+1][current_node[0]][0]<255):
+    #     current_node = [current_node[0], canvas.shape[0] - (current_node[1] + 1)]
+    if(next_node[0]-1 > 0) and (canvas[next_node[1]][next_node[0]-1][0]<255):
+        next_node[0] = next_node[0] - 1 
+        return True,next_node
+    else:
+        return False,next_node
+def action_move_right(node,canvas):
+#     """
+#     @brief: This function checks if the right movement is possible for the current position
+#     :param node: present node state
+#     :return: boolean (true if upward movement is possible, false otherwise) and the generated node(same state if next state is not possible)
+#     """
+    next_node = copy.deepcopy(node)
+    # if(canvas.shape[0] - (current_node[1]+1)>0) and (canvas[canvas.shape[0]-current_node[1]+1][current_node[0]][0]<255):
+    #     current_node = [current_node[0], canvas.shape[0] - (current_node[1] + 1)]
+    if(next_node[0]+1 < canvas.shape[1]) and (canvas[next_node[1]][next_node[0]+1][0]<255):
+        next_node[0] = next_node[0] + 1 
+        return True,next_node
+    else:
+        return False,next_node
+def action_move_top_right(node,canvas):
+#     """
+#     @brief: This function checks if the right movement is possible for the current position
+#     :param node: present node state
+#     :return: boolean (true if upward movement is possible, false otherwise) and the generated node(same state if next state is not possible)
+#     """
+    next_node = copy.deepcopy(node)
+    # if(canvas.shape[0] - (current_node[1]+1)>0) and (canvas[canvas.shape[0]-current_node[1]+1][current_node[0]][0]<255):
+    #     current_node = [current_node[0], canvas.shape[0] - (current_node[1] + 1)]
+    if(next_node[1]-1 > 0) and (next_node[0]+1 <canvas.shape[1]) and (canvas[next_node[1]-1][next_node[0]+1][0]<255):
+        next_node[1] = next_node[1] - 1
+        next_node[0] = next_node[0] + 1 
+        return True,next_node
+    else:
+        return False,next_node
+def action_move_bottom_right(node,canvas):
+#     """
+#     @brief: This function checks if the right movement is possible for the current position
+#     :param node: present node state
+#     :return: boolean (true if upward movement is possible, false otherwise) and the generated node(same state if next state is not possible)
+#     """
+    next_node = copy.deepcopy(node)
+    if(next_node[1]+1 < canvas.shape[0]) and (next_node[0]+1 <canvas.shape[1]) and (canvas[next_node[1]+1][next_node[0]+1][0]<255):
+        next_node[1] = next_node[1] + 1
+        next_node[0] = next_node[0] + 1 
+        return True,next_node
+    else:
+        return False,next_node
+
+def action_move_bottom_left(node,canvas):
+#     """
+#     @brief: This function checks if the right movement is possible for the current position
+#     :param node: present node state
+#     :return: boolean (true if upward movement is possible, false otherwise) and the generated node(same state if next state is not possible)
+#     """
+    next_node = copy.deepcopy(node)
+    if(next_node[1]+1 < canvas.shape[0]) and (next_node[0]-1 >0) and (canvas[next_node[1]+1][next_node[0]-1][0]<255):
+        next_node[1] = next_node[1] + 1
+        next_node[0] = next_node[0] - 1 
+        return True,next_node
+    else:
+        return False,next_node
+
+def action_move_top_left(node,canvas):
+#     """
+#     @brief: This function checks if the right movement is possible for the current position
+#     :param node: present node state
+#     :return: boolean (true if upward movement is possible, false otherwise) and the generated node(same state if next state is not possible)
+#     """
+    next_node = copy.deepcopy(node)
+    if(next_node[1]-1 > 0) and (next_node[0]-1 >0) and (canvas[next_node[1]-1][next_node[0]-1][0]<255):
+        next_node[1] = next_node[1] - 1
+        next_node[0] = next_node[0] + 1 
+        return True,next_node
+    else:
+        return False,next_node
+
+
+def dijkstra(initial_state,final_state,canvas):
+    open_list = []
+    closed_list = {}
+    back_track_flag = False
+    hq.heappush(open_list,[0,initial_state,initial_state])
+    while(len(open_list)>0):
+        # 0: cost, 1: parent node, 2: present node
+        node = hq.heappop(open_list)
+        closed_list[node[2]] = node[1]
+        present_cost = node[0]
+        if node[2] == final_state:
+            back_track_flag = True
+            break
+
+        flag,next_node = action_move_up(node[2])
+        if(flag):
+            if next_node not in closed_list:
+                for i in range(len(open_list)):
+                    if(open_list[i][2] == next_node):
+                        if(present_cost+1<open_list[i][0]):
+                            open_list[i][0] = present_cost+1
+                            open_list[i][1] = node[2]
+                    else:
+                        hq.heappush(open_list,[present_cost+1, node[2], next_node])
+        
+        flag,next_node = action_move_top_right(node[2])
+        if(flag):
+            if next_node not in closed_list:
+                for i in range(len(open_list)):
+                    if(open_list[i][2] == next_node):
+                        if(present_cost+1.4<open_list[i][0]):
+                            open_list[i][0] = present_cost+1.4
+                            open_list[i][1] = node[2]
+                    else:
+                        hq.heappush(open_list,[present_cost+1.4, node[2], next_node])
+                
+        flag,next_node = action_move_right(node[2])
+        if(flag):
+            if next_node not in closed_list:
+                for i in range(len(open_list)):
+                    if(open_list[i][2] == next_node):
+                        if(present_cost+1<open_list[i][0]):
+                            open_list[i][0] = present_cost+1
+                            open_list[i][1] = node[2]
+                    else:
+                        hq.heappush(open_list,[present_cost+1, node[2], next_node])
+        
+        flag,next_node = action_move_bottom_right(node[2])
+        if(flag):
+            if next_node not in closed_list:
+                for i in range(len(open_list)):
+                    if(open_list[i][2] == next_node):
+                        if(present_cost+1.4<open_list[i][0]):
+                            open_list[i][0] = present_cost+1.4
+                            open_list[i][1] = node[2]
+                    else:
+                        hq.heappush(open_list,[present_cost+1.4, node[2], next_node])
+        
+        flag,next_node = action_move_down(node[2])
+        if(flag):
+            if next_node not in closed_list:
+                for i in range(len(open_list)):
+                    if(open_list[i][2] == next_node):
+                        if(present_cost+1<open_list[i][0]):
+                            open_list[i][0] = present_cost+1
+                            open_list[i][1] = node[2]
+                    else:
+                        hq.heappush(open_list,[present_cost+1, node[2], next_node])
+        
+        flag,next_node = action_move_bottom_left(node[2])
+        if(flag):
+            if next_node not in closed_list:
+                for i in range(len(open_list)):
+                    if(open_list[i][2] == next_node):
+                        if(present_cost+1.4<open_list[i][0]):
+                            open_list[i][0] = present_cost+1.4
+                            open_list[i][1] = node[2]
+                    else:
+                        hq.heappush(open_list,[present_cost+1.4, node[2], next_node])
+        
+        flag,next_node = action_move_left(node[2])
+        if(flag):
+            if next_node not in closed_list:
+                for i in range(len(open_list)):
+                    if(open_list[i][2] == next_node):
+                        if(present_cost+1<open_list[i][0]):
+                            open_list[i][0] = present_cost+1
+                            open_list[i][1] = node[2]
+                    else:
+                        hq.heappush(open_list,[present_cost+1, node[2], next_node])
+        
+        flag,next_node = action_move_top_left(node[2])
+        if(flag):
+            if next_node not in closed_list:
+                for i in range(len(open_list)):
+                    if(open_list[i][2] == next_node):
+                        if(present_cost+1.4<open_list[i][0]):
+                            open_list[i][0] = present_cost+1.4
+                            open_list[i][1] = node[2]
+                    else:
+                        hq.heappush(open_list,[present_cost+1.4, node[2], next_node])
+        hq.heapify()
+    
+    if(back_track_flag):
+        back_track(final_state,closed_list)
+    else:
+        print("Solution Cannot Be Found")
+        
+        
+            
+def back_track(final_state,closed_list):
+    pass
+
 if __name__ == '__main__':
-    # initial_state,final_state = take_inputs()
-    # print(initial_state,final_state)
-
     canvas = np.ones((250,400,3),dtype="uint8")
-    # canvas = draw_obstacles(canvas)
-    # cv2.imshow("Canvas",canvas)
-    # cv2.waitKey(0)
-    # cv2.destroyAllWindows()
-
+    canvas = draw_obstacles(canvas)
+    initial_state,final_state = take_inputs()
+    #Check if the initial and final states are in the obstacle space
+    # print(initial_state,final_state)
+    cv2.imshow("Canvas",canvas)
+    cv2.waitKey(0)
+    cv2.destroyAllWindows()
+    dijkstra(initial_state,final_state,canvas)
     
