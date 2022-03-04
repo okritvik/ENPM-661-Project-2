@@ -82,9 +82,9 @@ def action_move_up(node,canvas):
     #     current_node = [current_node[0], canvas.shape[0] - (current_node[1] + 1)]
     if(next_node[1]-1 > 0) and (canvas[next_node[1]-1][next_node[0]][0]<255):
         next_node[1] = next_node[1] - 1 
-        return True,next_node
+        return True,tuple(next_node)
     else:
-        return False,next_node
+        return False,tuple(next_node)
 
 def action_move_down(node,canvas):
 #     """
@@ -97,9 +97,9 @@ def action_move_down(node,canvas):
     #     current_node = [current_node[0], canvas.shape[0] - (current_node[1] + 1)]
     if(next_node[1]+1 < canvas.shape[0]) and (canvas[next_node[1]+1][next_node[0]][0]<255):
         next_node[1] = next_node[1] + 1 
-        return True,next_node
+        return True,tuple(next_node)
     else:
-        return False,next_node
+        return False,tuple(next_node)
 
 def action_move_left(node,canvas):
 #     """
@@ -112,9 +112,9 @@ def action_move_left(node,canvas):
     #     current_node = [current_node[0], canvas.shape[0] - (current_node[1] + 1)]
     if(next_node[0]-1 > 0) and (canvas[next_node[1]][next_node[0]-1][0]<255):
         next_node[0] = next_node[0] - 1 
-        return True,next_node
+        return True,tuple(next_node)
     else:
-        return False,next_node
+        return False,tuple(next_node)
 def action_move_right(node,canvas):
 #     """
 #     @brief: This function checks if the right movement is possible for the current position
@@ -126,9 +126,9 @@ def action_move_right(node,canvas):
     #     current_node = [current_node[0], canvas.shape[0] - (current_node[1] + 1)]
     if(next_node[0]+1 < canvas.shape[1]) and (canvas[next_node[1]][next_node[0]+1][0]<255):
         next_node[0] = next_node[0] + 1 
-        return True,next_node
+        return True,tuple(next_node)
     else:
-        return False,next_node
+        return False,tuple(next_node)
 def action_move_top_right(node,canvas):
 #     """
 #     @brief: This function checks if the right movement is possible for the current position
@@ -141,9 +141,9 @@ def action_move_top_right(node,canvas):
     if(next_node[1]-1 > 0) and (next_node[0]+1 <canvas.shape[1]) and (canvas[next_node[1]-1][next_node[0]+1][0]<255):
         next_node[1] = next_node[1] - 1
         next_node[0] = next_node[0] + 1 
-        return True,next_node
+        return True,tuple(next_node)
     else:
-        return False,next_node
+        return False,tuple(next_node)
 def action_move_bottom_right(node,canvas):
 #     """
 #     @brief: This function checks if the right movement is possible for the current position
@@ -154,9 +154,9 @@ def action_move_bottom_right(node,canvas):
     if(next_node[1]+1 < canvas.shape[0]) and (next_node[0]+1 <canvas.shape[1]) and (canvas[next_node[1]+1][next_node[0]+1][0]<255):
         next_node[1] = next_node[1] + 1
         next_node[0] = next_node[0] + 1 
-        return True,next_node
+        return True,tuple(next_node)
     else:
-        return False,next_node
+        return False,tuple(next_node)
 
 def action_move_bottom_left(node,canvas):
 #     """
@@ -168,9 +168,9 @@ def action_move_bottom_left(node,canvas):
     if(next_node[1]+1 < canvas.shape[0]) and (next_node[0]-1 >0) and (canvas[next_node[1]+1][next_node[0]-1][0]<255):
         next_node[1] = next_node[1] + 1
         next_node[0] = next_node[0] - 1 
-        return True,next_node
+        return True,tuple(next_node)
     else:
-        return False,next_node
+        return False,tuple(next_node)
 
 def action_move_top_left(node,canvas):
 #     """
@@ -182,132 +182,202 @@ def action_move_top_left(node,canvas):
     if(next_node[1]-1 > 0) and (next_node[0]-1 >0) and (canvas[next_node[1]-1][next_node[0]-1][0]<255):
         next_node[1] = next_node[1] - 1
         next_node[0] = next_node[0] + 1 
-        return True,next_node
+        return True,tuple(next_node)
     else:
-        return False,next_node
+        return False,tuple(next_node)
 
 
 def dijkstra(initial_state,final_state,canvas):
     open_list = []
     closed_list = {}
     back_track_flag = False
+    hq.heapify(open_list)
     hq.heappush(open_list,[0,initial_state,initial_state])
     while(len(open_list)>0):
         # 0: cost, 1: parent node, 2: present node
         node = hq.heappop(open_list)
-        closed_list[node[2]] = node[1]
+        print(node)
+        closed_list[(node[2][0],node[2][1])] = node[1]
         present_cost = node[0]
-        if node[2] == final_state:
+        if list(node[2]) == final_state:
             back_track_flag = True
+            print("Back Track")
             break
 
-        flag,next_node = action_move_up(node[2])
+        flag,next_node = action_move_up(node[2],canvas)
         if(flag):
+            print("Move up")
             if next_node not in closed_list:
+                temp = False
                 for i in range(len(open_list)):
-                    if(open_list[i][2] == next_node):
-                        if(present_cost+1<open_list[i][0]):
+                    if(open_list[i][2] == list(next_node)):
+                        print("Found in Open list: ", open_list[i][2],next_node)
+                        temp = True
+                        if((present_cost+1)<open_list[i][0]):
+                            print("Before Updation: ",len(open_list))
                             open_list[i][0] = present_cost+1
                             open_list[i][1] = node[2]
-                    else:
-                        hq.heappush(open_list,[present_cost+1, node[2], next_node])
+                            print("After Updation: ", len(open_list))
+                if(not temp):
+                    hq.heappush(open_list,[present_cost+1, node[2], list(next_node)])
+                    hq.heapify(open_list)
+                    print("Pushed",temp)
         
-        flag,next_node = action_move_top_right(node[2])
+        flag,next_node = action_move_top_right(node[2],canvas)
         if(flag):
+            print("Move top right")
             if next_node not in closed_list:
+                temp = False
                 for i in range(len(open_list)):
-                    if(open_list[i][2] == next_node):
-                        if(present_cost+1.4<open_list[i][0]):
+                    if(open_list[i][2] == list(next_node)):
+                        print("Found in Open list: ", open_list[i][2],next_node)
+                        temp = True
+                        if((present_cost+1.4)<open_list[i][0]):
                             open_list[i][0] = present_cost+1.4
                             open_list[i][1] = node[2]
-                    else:
-                        hq.heappush(open_list,[present_cost+1.4, node[2], next_node])
+                        break
+                if(not temp):
+                    hq.heappush(open_list,[present_cost+1.4, node[2], list(next_node)])
+                    hq.heapify(open_list)
+                    print("Pushed",temp)
                 
-        flag,next_node = action_move_right(node[2])
+        flag,next_node = action_move_right(node[2],canvas)
         if(flag):
+            print("Move right")
             if next_node not in closed_list:
+                temp = False
                 for i in range(len(open_list)):
-                    if(open_list[i][2] == next_node):
-                        if(present_cost+1<open_list[i][0]):
+                    if(open_list[i][2] == list(next_node)):
+                        print("Found in Open list: ", open_list[i][2],next_node)
+                        temp = True
+                        if((present_cost+1)<open_list[i][0]):
                             open_list[i][0] = present_cost+1
                             open_list[i][1] = node[2]
-                    else:
-                        hq.heappush(open_list,[present_cost+1, node[2], next_node])
-        
-        flag,next_node = action_move_bottom_right(node[2])
+                        break
+                if(not temp):
+                    hq.heappush(open_list,[present_cost+1, node[2], list(next_node)])
+                    hq.heapify(open_list)
+                    print("Pushed",temp)
+    
+        flag,next_node = action_move_bottom_right(node[2],canvas)
         if(flag):
+            print("Move bottom right")
             if next_node not in closed_list:
+                temp = False
                 for i in range(len(open_list)):
-                    if(open_list[i][2] == next_node):
-                        if(present_cost+1.4<open_list[i][0]):
+                    if(open_list[i][2] == list(next_node)):
+                        print("Found in Open list: ", open_list[i][2],next_node)
+                        temp = True
+                        if((present_cost+1.4)<open_list[i][0]):
                             open_list[i][0] = present_cost+1.4
                             open_list[i][1] = node[2]
-                    else:
-                        hq.heappush(open_list,[present_cost+1.4, node[2], next_node])
+                        break
+                if(not temp):
+                    hq.heappush(open_list,[present_cost+1.4, node[2], list(next_node)])
+                    hq.heapify(open_list)
+                    print("Pushed",temp)
         
-        flag,next_node = action_move_down(node[2])
+        flag,next_node = action_move_down(node[2],canvas)
         if(flag):
+            print("Move down")
             if next_node not in closed_list:
+                temp = False
                 for i in range(len(open_list)):
-                    if(open_list[i][2] == next_node):
-                        if(present_cost+1<open_list[i][0]):
+                    if(open_list[i][2] == list(next_node)):
+                        print("Found in Open list: ", open_list[i][2],next_node)
+                        temp = True
+                        if((present_cost+1)<open_list[i][0]):
                             open_list[i][0] = present_cost+1
                             open_list[i][1] = node[2]
-                    else:
-                        hq.heappush(open_list,[present_cost+1, node[2], next_node])
+                        break
+                if(not temp):
+                    hq.heappush(open_list,[present_cost+1, node[2], list(next_node)])
+                    hq.heapify(open_list)
+                    print("Pushed",temp)
         
-        flag,next_node = action_move_bottom_left(node[2])
+        flag,next_node = action_move_bottom_left(node[2],canvas)
         if(flag):
+            print("Move bottom left")
             if next_node not in closed_list:
+                temp = False
                 for i in range(len(open_list)):
-                    if(open_list[i][2] == next_node):
-                        if(present_cost+1.4<open_list[i][0]):
+                    if(open_list[i][2] == list(next_node)):
+                        print("Found in Open list: ", open_list[i][2],next_node)
+                        temp = True
+                        if((present_cost+1.4)<open_list[i][0]):
                             open_list[i][0] = present_cost+1.4
                             open_list[i][1] = node[2]
-                    else:
-                        hq.heappush(open_list,[present_cost+1.4, node[2], next_node])
+                        break
+                if(not temp):
+                    hq.heappush(open_list,[present_cost+1.4, node[2], list(next_node)])
+                    hq.heapify(open_list)
+                    print("Pushed",temp)
         
-        flag,next_node = action_move_left(node[2])
+        flag,next_node = action_move_left(node[2],canvas)
         if(flag):
+            print("Move left")
             if next_node not in closed_list:
+                temp = False
                 for i in range(len(open_list)):
-                    if(open_list[i][2] == next_node):
-                        if(present_cost+1<open_list[i][0]):
+                    if(open_list[i][2] == list(next_node)):
+                        print("Found in Open list: ", open_list[i][2],next_node)
+                        temp = True
+                        if((present_cost+1)<open_list[i][0]):
                             open_list[i][0] = present_cost+1
                             open_list[i][1] = node[2]
-                    else:
-                        hq.heappush(open_list,[present_cost+1, node[2], next_node])
+                        break
+                if(not temp):
+                    hq.heappush(open_list,[present_cost+1, node[2], list(next_node)])
+                    hq.heapify(open_list)
+                    print("Pushed",temp)
         
-        flag,next_node = action_move_top_left(node[2])
+        flag,next_node = action_move_top_left(node[2],canvas)
         if(flag):
+            print("Move top left")
             if next_node not in closed_list:
+                temp = False
                 for i in range(len(open_list)):
-                    if(open_list[i][2] == next_node):
-                        if(present_cost+1.4<open_list[i][0]):
+                    if(open_list[i][2] == list(next_node)):
+                        print("Found in Open list: ", open_list[i][2],next_node)
+                        temp = True
+                        if((present_cost+1.4)<open_list[i][0]):
                             open_list[i][0] = present_cost+1.4
                             open_list[i][1] = node[2]
-                    else:
-                        hq.heappush(open_list,[present_cost+1.4, node[2], next_node])
-        hq.heapify()
+                        break
+                if(not temp):
+                    hq.heappush(open_list,[present_cost+1.4, node[2], list(next_node)])
+                    hq.heapify(open_list)
+                    print("Pushed",temp)
+        
+        # hq.heapify(open_list)
+        print("Open List length",len(open_list))
+        print("Closed List Length", len(closed_list))
+        # print("Closed List: ",closed_list)
     
     if(back_track_flag):
-        back_track(final_state,closed_list)
+        back_track(final_state,closed_list,canvas)
     else:
         print("Solution Cannot Be Found")
         
         
             
-def back_track(final_state,closed_list):
-    pass
+def back_track(final_state,closed_list,canvas):
+    keys = closed_list.keys()
+    for key in keys:
+        canvas[key[1]][key[0]] = [255,255,255]
 
 if __name__ == '__main__':
     canvas = np.ones((250,400,3),dtype="uint8")
     canvas = draw_obstacles(canvas)
+    # cv2.imshow("Canvas",canvas)
+    # cv2.waitKey(0)
+    # cv2.destroyAllWindows()
     initial_state,final_state = take_inputs()
     #Check if the initial and final states are in the obstacle space
     # print(initial_state,final_state)
+    cv2.circle(canvas,tuple(initial_state),3,(0,255,0),-1)
+    cv2.circle(canvas,tuple(final_state),3,(0,0,255),-1)
+    dijkstra(initial_state,final_state,canvas)
     cv2.imshow("Canvas",canvas)
     cv2.waitKey(0)
     cv2.destroyAllWindows()
-    dijkstra(initial_state,final_state,canvas)
-    
