@@ -8,6 +8,8 @@ A geometrical obstacle map is given. For the given obstacle map, mathematical eq
 
 """
 import copy
+import numpy as np
+import cv2
 
 def take_inputs():
     """
@@ -46,6 +48,36 @@ def take_inputs():
         break
     return initial_state,final_state
 
+def draw_obstacles(canvas):
+    # cv2.circle(canvas, (300,65),45,(255,0,0),-1)
+    # cv2.fillPoly(canvas, pts = [np.array([[115,40],[36,65],[105,150],[80,70]])], color=(255,0,0)) #Arrow
+    # cv2.fillPoly(canvas, pts = [np.array([[200,110],[235,130],[235,170],[200,190],[165,170],[165,130]])], color=(255,0,0)) #Hexagon
+    
+    height,width,_ = canvas.shape
+    # print(shape)
+    for i in range(width):
+        for j in range(height):
+            if(i-5<=0) or (i-395>=0) or (j-5 <=0) or (j-245>=0):
+                canvas[j][i] = [255,0,0]
+
+            if ((i-300)**2+(j-65)**2-(45**2))<=0:
+                canvas[j][i] = [255,0,0]
+            
+            if (j+(0.57*i)-218.53)>=0 and (j-(0.57*i)+10.04)>=0 and (i-240)<=0 and (j+(0.57*i)-310.04)<=0 and (j-(0.57*i)-81.465)<=0 and (i-160)>=0:
+                canvas[j][i] = [255,0,0]
+
+            if ((j+(0.316*i)-71.1483)>=0 and (j+(0.857*i)-145.156)<=0 and (j-(0.114*i)-60.909)<=0) or ((j-(1.23*i)-28.576)<=0 and (j-(3.2*i)+202.763)>=0 and (j-(0.114*i)-60.909)>=0):
+                canvas[j][i] = [255,0,0]
+    return canvas
+
 if __name__ == '__main__':
-    initial_state,final_state = take_inputs()
-    print(initial_state,final_state)
+    # initial_state,final_state = take_inputs()
+    # print(initial_state,final_state)
+
+    canvas = np.ones((250,400,3),dtype="uint8")
+    # canvas = draw_obstacles(canvas)
+    # cv2.imshow("Canvas",canvas)
+    # cv2.waitKey(0)
+    # cv2.destroyAllWindows()
+
+    
