@@ -11,6 +11,7 @@ import copy
 import numpy as np
 import cv2
 import heapq as hq
+import time
 
 def take_inputs():
     """
@@ -181,7 +182,7 @@ def action_move_top_left(node,canvas):
     next_node = copy.deepcopy(node)
     if(next_node[1]-1 > 0) and (next_node[0]-1 >0) and (canvas[next_node[1]-1][next_node[0]-1][0]<255):
         next_node[1] = next_node[1] - 1
-        next_node[0] = next_node[0] + 1 
+        next_node[0] = next_node[0] - 1 
         return True,tuple(next_node)
     else:
         return False,tuple(next_node)
@@ -374,6 +375,7 @@ def back_track(final_state,closed_list,canvas):
         cv2.imshow("Back Tracking",canvas)
 
 if __name__ == '__main__':
+    start_time = time.time()
     canvas = np.ones((250,400,3),dtype="uint8")
     canvas = draw_obstacles(canvas)
     # cv2.imshow("Canvas",canvas)
@@ -386,5 +388,8 @@ if __name__ == '__main__':
     cv2.circle(canvas,tuple(final_state),3,(0,0,255),-1)
     dijkstra(initial_state,final_state,canvas)
     # cv2.imshow("Canvas",canvas)
+    end_time = time.time()
     cv2.waitKey(0)
     cv2.destroyAllWindows()
+    print("Code Execution Time: ",end_time-start_time)
+    
