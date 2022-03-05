@@ -7,43 +7,50 @@ Cost for up, down, left, right actions is 1 and for diagonal actions, the cost i
 A geometrical obstacle map is given. For the given obstacle map, mathematical equations are developed and the path is found from a given start node to goal node.
 
 """
+
+#Imports
 import copy
 import numpy as np
 import cv2
 import heapq as hq
 import time
 
-def take_inputs():
+def take_inputs(canvas):
     """
-    @brief: This function takes the initial node state and final node state to solve the puzzle
+    @brief: This function takes the initial node state and final node state to solve the puzzle. 
+    Prompts the user to input again if the nodes are not positive and out of bounds
     :return: Initial state and final state of the puzzle to be solved
     """
     initial_state = []
     final_state = []
     while True:
         state = input("Enter the X Coordinate of Start Node: ")
-        if(int(state)<0):
+        if(int(state)<0 or int(state)>canvas.shape[1]-1):
             print("Enter Valid X Coordinate")
             continue
         else:
             initial_state.append(int(state))
+            break
+    while True:
         state = input("Enter the Y Coordinate of Start Node: ")
-        if(int(state)<0):
+        if(int(state)<0 or int(state)>canvas.shape[0]-1):
             print("Enter Valid Y Coordinate")
             continue
         else:
             initial_state.append(int(state))
-        
+            break
+    while True:
         state = input("Enter the X Coordinate of Goal Node: ")
-        if(int(state)<0):
+        if(int(state)<0 or int(state)>canvas.shape[1]-1):
             print("Enter Valid X Coordinate")
             continue
         else:
             final_state.append(int(state))
-
+            break
+    while True:
         state = input("Enter the Y Coordinate of Goal Node: ")
-        if(int(state)<0):
-            print("Enter Valid X Coordinate")
+        if(int(state)<0 or int(state)>canvas.shape[0]-1):
+            print("Enter Valid Y Coordinate")
             continue
         else:
             final_state.append(int(state))
@@ -396,13 +403,11 @@ if __name__ == '__main__':
     # cv2.imshow("Canvas",canvas)
     # cv2.waitKey(0)
     # cv2.destroyAllWindows()
-    initial_state,final_state = take_inputs()
+    initial_state,final_state = take_inputs(canvas)
     #Changing the cartesian coordinates:
     initial_state[1] = canvas.shape[0]-1 - initial_state[1]
     final_state[1] = canvas.shape[0]-1 - final_state[1]
     
-    #Check if the initial and final states are in the obstacle space
-    # print(initial_state,final_state)
     cv2.circle(canvas,tuple(initial_state),3,(0,255,0),-1)
     cv2.circle(canvas,tuple(final_state),3,(0,0,255),-1)
     cv2.imshow("Start and Goal Nodes",canvas)
