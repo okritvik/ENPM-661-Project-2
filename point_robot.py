@@ -363,18 +363,32 @@ def dijkstra(initial_state,final_state,canvas):
         # print("Closed List: ",closed_list)
     
     if(back_track_flag):
-        back_track(final_state,closed_list,canvas)
+        back_track(initial_state,final_state,closed_list,canvas)
     else:
         print("Solution Cannot Be Found")
         
             
-def back_track(final_state,closed_list,canvas):
+def back_track(initial_state,final_state,closed_list,canvas):
     keys = closed_list.keys()
+    path_stack = []
     for key in keys:
         canvas[key[1]][key[0]] = [255,255,255]
-        cv2.imshow("Back Tracking",canvas)
+        cv2.imshow("Nodes Exploration",canvas)
         cv2.waitKey(1)
-
+    parent_node = closed_list[tuple(final_state)]
+    path_stack.append(final_state)
+    while(parent_node!=initial_state):
+        # print("Parent Node",parent_node)
+        # canvas[parent_node[1]][parent_node[0]] = [19,209,158]
+        path_stack.append(parent_node)
+        parent_node = closed_list[tuple(parent_node)]
+        # cv2.imshow("Path",canvas)
+        # cv2.waitKey(1)
+    path_stack.append(initial_state)
+    while(len(path_stack)>0):
+        path_node = path_stack.pop()
+        canvas[path_node[1]][path_node[0]] = [19,209,158]
+    cv2.imshow("Path",canvas)
 if __name__ == '__main__':
     start_time = time.time()
     canvas = np.ones((250,400,3),dtype="uint8")
@@ -384,14 +398,14 @@ if __name__ == '__main__':
     # cv2.destroyAllWindows()
     initial_state,final_state = take_inputs()
     #Changing the cartesian coordinates:
-    # initial_state[1] = canvas.shape[0] - initial_state[1]
-    # final_state[1] = canvas.shape[0] - final_state[1]
-
+    initial_state[1] = canvas.shape[0]-1 - initial_state[1]
+    final_state[1] = canvas.shape[0]-1 - final_state[1]
+    
     #Check if the initial and final states are in the obstacle space
     # print(initial_state,final_state)
     cv2.circle(canvas,tuple(initial_state),3,(0,255,0),-1)
     cv2.circle(canvas,tuple(final_state),3,(0,0,255),-1)
-    cv2.imshow("Canvas",canvas)
+    cv2.imshow("Start and Goal Nodes",canvas)
     dijkstra(initial_state,final_state,canvas)
     end_time = time.time()
     cv2.waitKey(0)
