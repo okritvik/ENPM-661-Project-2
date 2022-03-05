@@ -414,8 +414,8 @@ def dijkstra(initial_state,final_state,canvas):
 
     else:
         print("Solution Cannot Be Found")
-        
-            
+
+
 def back_track(initial_state,final_state,closed_list,canvas):
     """
     @brief: This function backtracks the start node after reaching the goal node.
