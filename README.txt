@@ -1,13 +1,17 @@
 Packages USED:
 
 copy
-NumPy - '1.17.4' (NumPy)
+numpy - '1.17.4' (NumPy)
 cv2   - '4.20.0' (OpenCV)
 heapq
 time
 
 How to Run the Code:
+Depending on your python configuration, run the code using:
+
 python3 Dijkstra-pathplanning-KumaraRitvik-Oruganti.py
+                        (or)                         
+python Dijkstra-pathplanning-KumaraRitvik-Oruganti.py
 
 Inputs:
 Give any random start and goal nodes. If prompted to re-enter the nodes, 

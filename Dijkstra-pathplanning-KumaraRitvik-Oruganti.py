@@ -4,8 +4,8 @@
 There will be 8 action sets, Up, Down, Left, Right and Four Diagonals.
 Cost for up, down, left, right actions is 1 and for diagonal actions, the cost is 1.4.
 
-A geometrical obstacle map is given. For the given obstacle map, mathematical equations are developed and the path is found from a given start node to goal node.
-
+A geometrical obstacle map is given. For the given obstacle map, mathematical equations are developed and with 5mm clearance, the obstacle map is generated using the half planes.
+The path is found from a given start node to goal node and visualized using OpenCV.
 """
 
 #Imports
@@ -73,6 +73,12 @@ def take_inputs(canvas):
     return initial_state,final_state
 
 def draw_obstacles(canvas):
+    """
+    @brief: This function goes through each node in the canvas image and checks for the
+    obstacle space using the half plane equations. 
+    If the node is in obstacle space, the color is changed to blue.
+    :param canvas: Canvas Image
+    """
     # Uncomment to use the cv2 functions to create the obstacle space
     # cv2.circle(canvas, (300,65),45,(255,0,0),-1)
     # cv2.fillPoly(canvas, pts = [np.array([[115,40],[36,65],[105,150],[80,70]])], color=(255,0,0)) #Arrow
@@ -411,12 +417,27 @@ def dijkstra(initial_state,final_state,canvas):
         
             
 def back_track(initial_state,final_state,closed_list,canvas):
+    """
+    @brief: This function backtracks the start node after reaching the goal node.
+    This function is also used for visualization of explored nodes and computed path using OpenCV.
+    A stack is used to store the intermediate nodes while transversing from the goal node to start node.
+
+    :param initial_state: Start Node
+    :param final_state: Goal Node
+    :param closed_list: Dictionary that contains nodes and its parents
+    :param canvas: Canvas Image 
+    """
+    #Creating video writer to generate a video.
+    fourcc = cv2.VideoWriter_fourcc(*'XVID')
+    out = cv2.VideoWriter('Dijkstra-KumaraRitvik-Oruganti.avi',fourcc,1000,(canvas.shape[1],canvas.shape[0]))
+    
     keys = closed_list.keys() #Returns all the nodes that are explored
     path_stack = [] #Stack to store the path from start to goal
     for key in keys:
         canvas[key[1]][key[0]] = [255,255,255] #Denoting the explored nodes with white color
         cv2.imshow("Nodes Exploration",canvas)
         cv2.waitKey(1)
+        out.write(canvas)
     parent_node = closed_list[tuple(final_state)]
     path_stack.append(final_state) #Appending the final state because of the loop starting condition
     while(parent_node!=initial_state):
@@ -432,23 +453,26 @@ def back_track(initial_state,final_state,closed_list,canvas):
     while(len(path_stack)>0):
         path_node = path_stack.pop()
         canvas[path_node[1]][path_node[0]] = [19,209,158]
+        out.write(canvas)
     
     cv2.imshow("Nodes Exploration",canvas)
+    out.release()
+
 if __name__ == '__main__':
     start_time = time.time() #Gives the time at which the program has started
-    canvas = np.ones((250,400,3),dtype="uint8")
-    canvas = draw_obstacles(canvas)
+    canvas = np.ones((250,400,3),dtype="uint8") #Creating a blank canvas
+    canvas = draw_obstacles(canvas) #Draw the obstacles in the canvas
+    #Uncomment the below lines to see the obstacle space. Press Any Key to close the image window
     # cv2.imshow("Canvas",canvas)
     # cv2.waitKey(0)
     # cv2.destroyAllWindows()
-    initial_state,final_state = take_inputs(canvas)
+    initial_state,final_state = take_inputs(canvas) #Take the start and goal node from the user
     #Changing the cartesian coordinates to image coordinates:
     initial_state[1] = canvas.shape[0]-1 - initial_state[1]
     final_state[1] = canvas.shape[0]-1 - final_state[1]
     
-    # cv2.imshow("Start and Goal Nodes",canvas)
-    dijkstra(initial_state,final_state,canvas)
+    dijkstra(initial_state,final_state,canvas) #Compute the path using Dijkstra Algorithm
     end_time = time.time() #Time taken to run the whole algorithm to find the optimal path
-    cv2.waitKey(0) #Waits till user presses a key
-    cv2.destroyAllWindows() #destroys all opencv opened windows
+    cv2.waitKey(0) #Waits till a key is pressedy by the user
+    cv2.destroyAllWindows() #destroys all opencv windows
     print("Code Execution Time: ",end_time-start_time) #Prints the total execution time
