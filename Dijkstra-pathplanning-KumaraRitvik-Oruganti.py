@@ -442,7 +442,7 @@ if __name__ == '__main__':
     # cv2.waitKey(0)
     # cv2.destroyAllWindows()
     initial_state,final_state = take_inputs(canvas)
-    #Changing the cartesian coordinates:
+    #Changing the cartesian coordinates to image coordinates:
     initial_state[1] = canvas.shape[0]-1 - initial_state[1]
     final_state[1] = canvas.shape[0]-1 - final_state[1]
     
