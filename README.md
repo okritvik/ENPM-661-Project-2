@@ -1,11 +1,7 @@
 # Dijkstra Path Planning - Point Robot with Obstacles
-Project - 03 (Phase 01) for the course ENPM661 - Planning for Autonomous Robots at the University of Maryland, College Park.
+Project - 02 for the course ENPM661 - Planning for Autonomous Robots at the University of Maryland, College Park.
 
 Implementation of the Dijkstra algorithm for path planning of a point robot with a clearance in a map consisting of convex and non-covex obstacles. 
-
-## Team Members
-- Kumara Ritvik Oruganti (okritvik@umd.edu)
-- Adarsh Malapaka (amalapak@umd.edu)
 
 ## Required Libraries:  
 * cv2 : To add arrows, lines or circles in the map at the desired coordinates. Version 4.20.0
@@ -22,19 +18,16 @@ Implementation of the Dijkstra algorithm for path planning of a point robot with
 	Start-Node: (16, 16)
 
 	Goal-Node:  (350, 150)
-<!-- 
+	
 ### Node Exploration
 <p align="center">
-  <img src="https://user-images.githubusercontent.com/40534801/159383496-facc8bd3-9bfd-4b3f-8aa7-253a0aba1881.gif" width="400" height="250">
+  <img src="https://user-images.githubusercontent.com/40200916/180885376-cb7b322d-50af-477d-a423-2f896d5cf8b6.gif" width="400" height="250">
 </p>
- -->
 
-<!-- 
 ### Optimal Path
 <p align="center">
-  <img src="https://user-images.githubusercontent.com/40534801/159372263-9075bff4-e728-4403-9912-189b5e1658ca.png" width="400" height="250">
+  <img src="https://user-images.githubusercontent.com/40200916/180879903-101be13c-a9a4-40ef-8b45-2052c8f4b740.png" width="400" height="250">
 </p>
- -->
 
 ## Test Case 2: 
   [co-ordinates with respect to bottom left corner origin of the window] 
@@ -45,19 +38,17 @@ Implementation of the Dijkstra algorithm for path planning of a point robot with
 	Goal-Node:  (360, 140)
 
 ### Node Exploration
-<!-- <p align="center">
-  <img src="https://user-images.githubusercontent.com/40534801/159382089-91ac6bfe-8a6c-4b02-a2c5-bb6879efc6d5.gif " width="400" height="250">
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/40200916/180886436-e24b7c0c-3a8b-42de-945d-d4249a968725.gif" width="400" height="250">
 </p>
- -->
-### Optimal Path
-<!-- <p align="center">
-  <img src="https://user-images.githubusercontent.com/40534801/159372566-d5347785-85e0-434f-a1ae-d713e76944fc.png " width="400" height="250">
-</p>
- -->
 
+### Optimal Path
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/40200916/180886502-a00cb2ad-fb8a-44b0-8d0e-9011c42facac.png" width="400" height="250">
+</p>
 
 ### Note: 
-The shapes in the map including the outer boudary walls have been bloated by robot clearance on all sides.
+The outer boudary walls have been bloated by robot clearance on all sides.
 
 
 ## Running the Code:
